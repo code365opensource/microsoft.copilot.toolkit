@@ -83,4 +83,7 @@ function New-DeclarativeCopilot {
     Compress-Archive -Path "$tempFolder\\*" -DestinationPath $zipFile
 
     Write-Host "The Declarative Copilot app has been created successfully. The zip file is saved as $zipFile."
+
+    # remove the temp folder
+    Remove-Item -Path $tempFolder -Recurse -Force
 }

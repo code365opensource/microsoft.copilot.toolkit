@@ -32,4 +32,7 @@ jobs:
           if($data.RequiredModules) {
             $data.RequiredModules | Foreach-Object {Install-Module -Name $_.ModuleName -RequiredVersion $_.ModuleVersion }
           }
+          Remove-Item -Path ".git" -Recurse -Force
+          Remove-Item -Path ".github" -Recurse -Force
+          Remove-Item -Path ".vscode" -Recurse -Force
           Publish-PSResource -ApiKey $env:nugetkey -Path microsoft.copilot.toolkit.psd1 -Repository PSGallery
