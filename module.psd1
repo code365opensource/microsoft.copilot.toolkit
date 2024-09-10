@@ -9,7 +9,7 @@
     CompatiblePSEditions = @("Desktop", "Core")
 
     # ID used to uniquely identify this module, replace with new GUID if copying module
-    GUID                 = 'ab6e9237-63b0-4907-b59d-c57cc02c5c55'
+    GUID                 = '556b9dda-7e86-4075-bbb5-ae9c439551b7'
 
     # Author of this module
     Author               = 'chenxizhang'
@@ -21,7 +21,7 @@
     Copyright            = '(c) code365.xyz. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description          = ''
+    Description          = 'The unofficial toolkit for Microsoft Copilot'
 
     # Minimum version of the PowerShell engine required by this module, change to 7.x if you just support PowerShell Core.
     PowerShellVersion    = '5.1'
@@ -43,7 +43,7 @@
 
     # Modules that must be imported into the global environment prior to importing this module
     # RequiredModules      = @(@{ ModuleName = 'MicrosoftTeams'; ModuleVersion = '2.0.0' }, @{ModuleName = 'AzureAD'; ModuleVersion = '2.0.2.130' })
-    RequiredModules      = @(@{ModuleName = "powershellextension"; ModuleVersion = "0.0.1"; Guid = "df717a00-1acf-45e8-a958-0c9bcb9af322" })
+    # RequiredModules      = @(@{ModuleName = "powershellextension"; ModuleVersion = "0.0.1"; Guid = "df717a00-1acf-45e8-a958-0c9bcb9af322" })
 
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()
@@ -61,10 +61,10 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport    = @()
+    FunctionsToExport    = @("New-DeclarativeCopilot")
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-    CmdletsToExport      = @()
+    CmdletsToExport      = @("New-DeclarativeCopilot")
 
     # Variables to export from this module
     VariablesToExport    = @()
@@ -90,18 +90,18 @@
             Tags         = @("code365", "community", "china", "chenxizhang", "PSEdition_Desktop", "PSEdition_Core", "Windows", "Linux", "MacOS")
 
             # A URL to the license for this module.
-            LicenseUri   = 'https://github.com/code365opensource/yourmodulename/blob/master/LICENSE'
+            LicenseUri   = 'https://github.com/code365opensource/microsoft.copilot.toolkit/blob/master/LICENSE'
 
             # A URL to the main website for this project.
-            ProjectUri   = 'https://github.com/code365opensource/yourmodulename/'
+            ProjectUri   = 'https://github.com/code365opensource/microsoft.copilot.toolkit/'
 
             # A URL to an icon representing this module.
             # IconUri = ''
 
             # ReleaseNotes of this module
-            ReleaseNotes = "https://github.com/code365opensource/yourmodulename/blob/master/CHANGELOG.md"
+            ReleaseNotes = "https://github.com/code365opensource/microsoft.copilot.toolkit/blob/master/CHANGELOG.md"
             # Prerelease string of this module
-            Prerelease   = 'preview'
+            # Prerelease   = 'preview'
 
             # Flag to indicate whether the module requires explicit user acceptance for install/update/save
             # RequireLicenseAcceptance = $false
@@ -114,7 +114,7 @@
     } # End of PrivateData hashtable
 
     # HelpInfo URI of this module
-    HelpInfoURI          = 'https://github.com/code365opensource/yourmodulename/'
+    HelpInfoURI          = 'https://github.com/code365opensource/microsoft.copilot.toolkit/'
 
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
     # DefaultCommandPrefix = ''

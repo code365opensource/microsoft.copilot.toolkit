@@ -26,8 +26,8 @@ jobs:
         env:
           nugetkey: ${{secrets.NUGETKEY}}
         run: |
-          Rename-Item -Path .\module.psd1 -NewName yourmodulename.psd1
+          Rename-Item -Path .\module.psd1 -NewName microsoft.copilot.toolkit.psd1
           Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-          $data = Import-PowerShellDataFile .\yourmodulename.psd1
+          $data = Import-PowerShellDataFile .\microsoft.copilot.toolkit.psd1
           $data.RequiredModules | Foreach-Object {Install-Module -Name $_.ModuleName -RequiredVersion $_.ModuleVersion }
-          Publish-PSResource -ApiKey $env:nugetkey -Path yourmodulename.psd1 -Repository PSGallery
+          Publish-PSResource -ApiKey $env:nugetkey -Path microsoft.copilot.toolkit.psd1 -Repository PSGallery
