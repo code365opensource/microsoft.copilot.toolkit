@@ -1,4 +1,5 @@
 function New-DeclarativeCopilot {
+    [CmdletBinding()]
     param (
         [string]$author,
         [Parameter(Mandatory = $true)]
