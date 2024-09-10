@@ -1,0 +1,33 @@
+name: publish to powershell gallery
+on:
+  push:
+    branches: [master]
+    paths:
+      - "**.psd1"
+
+  workflow_dispatch:
+
+jobs:
+  publishmodule:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dlemstra/code-sign-action@v1
+        with:
+          certificate: '${{ secrets.CERTIFICATE }}'
+          password: '${{ secrets.CERTIFICATE_PASSWORD }}'
+          folder: .
+          recursive: true
+          files: |
+            *.ps1
+            *.psm1
+      - name: publish to powershell gallery
+        shell: pwsh
+        env:
+          nugetkey: ${{secrets.NUGETKEY}}
+        run: |
+          Rename-Item -Path .\module.psd1 -NewName yourmodulename.psd1
+          Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+          $data = Import-PowerShellDataFile .\yourmodulename.psd1
+          $data.RequiredModules | Foreach-Object {Install-Module -Name $_.ModuleName -RequiredVersion $_.ModuleVersion }
+          Publish-PSResource -ApiKey $env:nugetkey -Path yourmodulename.psd1 -Repository PSGallery
