@@ -1,3 +1,5 @@
+$OutputEncoding = [System.Text.Encoding]::UTF8
+
 foreach ($directory in @('Public', 'Private', '.')) {
 
     $path = Join-Path -Path $PSScriptRoot -ChildPath $directory
