@@ -15,6 +15,8 @@
     The path of the outline icon of the Declarative Copilot, it should be a 192x192 png file. It is optional, if not specified, the default icon will be used.
 .PARAMETER colorIcon32x32
     The path of the color icon of the Declarative Copilot, it should be a 32x32 png file. It is optional, if not specified, the default icon will be used.
+.PARAMETER starterPrompts
+    The starter prompts of the Declarative Copilot. You can define at most 6 starter prompts. Each one should be a string, format as "title,text", for example, "Create a new document,Create a new document in Word". It means the title is "Create a new document" and the text is "Create a new document in Word". If you don't specify "," the title and text will be the same.
 .PARAMETER enableWebSearch
     Enable the Web Search capability.
 .PARAMETER enableGraphicArt
@@ -27,9 +29,13 @@
     The IDs of the Graph Connectors which the Declarative Copilot can access.
 .PARAMETER actionFiles
     The action (plugin) files which the Declarative Copilot can access. 
+.EXAMPLE
+    New-DeclarativeCopilot -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." -starterPrompts "Write PM spec, Please help me write spec about the idea below`n" -enableWebSearch -enableGraphicArt -enableCodeInterpreter 
+
+    This example creates a Declarative Copilot app package named "Product Copilot" with the instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." and a starter prompt "Write PM spec, Please help me write spec about the idea below". It enables the Web Search, Graphic Art, and Code Interpreter capabilities.
 #>
 function New-DeclarativeCopilot {
-    [CmdletBinding()]
+    [CmdletBinding()][Alias("ndc")]
     param (
         [string]$author,
         [Parameter(Mandatory = $true)]
@@ -39,6 +45,7 @@ function New-DeclarativeCopilot {
         [string]$instructions,
         [string]$outlineIcon192x192,
         [string]$colorIcon32x32,
+        [string[]]$starterPrompts,
         [switch]$enableWebSearch,
         [switch]$enableGraphicArt,
         [switch]$enableCodeInterpreter,
@@ -47,7 +54,7 @@ function New-DeclarativeCopilot {
         [string[]]$actionFiles
     )
 
-    Send-AppInsightsTrace -Message "microsoft.copilot.toolkit" -Properties @{ "command" = "New-DeclarativeCopilot" }
+    Send-AppInsightsTrace -Message "microsoft.copilot.toolkit" -Properties @{ "command" = "New-DeclarativeCopilot" } -ErrorAction SilentlyContinue
     
     # copy the content of private\assets\declarativecopilot to the temp folder
     $tempFolder = Join-Path $env:TEMP "microsoft.copilot.toolkit-$([Guid]::NewGuid().ToString())"
@@ -84,6 +91,30 @@ function New-DeclarativeCopilot {
     $copilot = Get-Content (Join-Path $tempFolder "declarativecopilot.json") | ConvertFrom-Json
     $copilot.name = $name
     $copilot.instructions = $instructions
+
+    # parse the starter prompts
+    if ($starterPrompts -and $starterPrompts.Count -gt 0) {       
+        $copilot | Add-Member -MemberType NoteProperty -Name "conversation_starters" -Value @(
+            foreach ($starterPrompt in $starterPrompts) {
+                $parts = $starterPrompt.Split(",")
+                if ($parts.Count -eq 1) {
+                    @{
+                        "title" = $parts[0]
+                        "text"  = $parts[0]
+                    }
+                }
+                else {
+                    @{
+                        "title" = $parts[0]
+                        "text"  = $parts[1]
+                    }
+                }
+            }
+        )
+    }
+
+    Write-Host ($copilot | ConvertTo-Json -Depth 10)
+
 
     $capabilities = @()
     if ($enableWebSearch) {
