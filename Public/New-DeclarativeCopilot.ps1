@@ -68,13 +68,13 @@ function New-DeclarativeCopilot {
     # update the outline icon
     if ($outlineIcon192x192 -and (Test-Path $outlineIcon192x192) -and ($outlineIcon192x192 -match "\.png$")) {
         # make sure it is a 192x192 png file
-        $outlineIcon = Join-Path $tempFolder "outlineIcon192x192.png"
+        $outlineIcon = Join-Path $tempFolder "outline.png"
         Copy-Item -Path $outlineIcon192x192 -Destination $outlineIcon -Force
     }
 
     # update the color icon
     if ($colorIcon32x32 -and (Test-Path $colorIcon32x32) -and ($colorIcon32x32 -match "\.png$")) {
-        $colorIcon = Join-Path $tempFolder "colorIcon32x32.png"
+        $colorIcon = Join-Path $tempFolder "color.png"
         Copy-Item -Path $colorIcon32x32 -Destination $colorIcon -Force
     }
 
