@@ -1,3 +1,33 @@
+<#
+.SYNOPSIS
+    Create a Declarative Copilot app package.
+.DESCRIPTION
+    This cmdlet creates a Declarative Copilot app package, which includes a Teams app with a Declarative Copilot.
+.PARAMETER author
+    The author of the Declarative Copilot app. It is optional, if not specified, the author will be Ares Chen.
+.PARAMETER name
+    The name of the Declarative Copilot.
+.PARAMETER description
+    The description of the Declarative Copilot.
+.PARAMETER instructions
+    The instructions of the Declarative Copilot, this is very important to guide the user to use the Declarative Copilot.
+.PARAMETER outlineIcon192x192
+    The path of the outline icon of the Declarative Copilot, it should be a 192x192 png file. It is optional, if not specified, the default icon will be used.
+.PARAMETER colorIcon32x32
+    The path of the color icon of the Declarative Copilot, it should be a 32x32 png file. It is optional, if not specified, the default icon will be used.
+.PARAMETER enableWebSearch
+    Enable the Web Search capability.
+.PARAMETER enableGraphicArt
+    Enable the Graphic Art capability which allows the user to generate image or video.
+.PARAMETER enableCodeInterpreter
+    Enable the Code Interpreter capability which allows the user to run code.
+.PARAMETER onedriveOrSharePointUrls
+    The URLs of the OneDrive or SharePoint files which the Declarative Copilot can access.
+.PARAMETER graphConnectorIds
+    The IDs of the Graph Connectors which the Declarative Copilot can access.
+.PARAMETER actionFiles
+    The action (plugin) files which the Declarative Copilot can access. 
+#>
 function New-DeclarativeCopilot {
     [CmdletBinding()]
     param (
@@ -11,7 +41,10 @@ function New-DeclarativeCopilot {
         [string]$colorIcon32x32,
         [switch]$enableWebSearch,
         [switch]$enableGraphicArt,
-        [switch]$enableCodeInterpreter
+        [switch]$enableCodeInterpreter,
+        [string[]]$onedriveOrSharePointUrls,
+        [string[]]$graphConnectorIds,
+        [string[]]$actionFiles
     )
     
     # copy the content of private\assets\declarativecopilot to the temp folder
@@ -49,6 +82,7 @@ function New-DeclarativeCopilot {
     $copilot = Get-Content (Join-Path $tempFolder "declarativecopilot.json") | ConvertFrom-Json
     $copilot.name = $name
     $copilot.instructions = $instructions
+
     $capabilities = @()
     if ($enableWebSearch) {
         $capabilities += @{
@@ -68,9 +102,52 @@ function New-DeclarativeCopilot {
         }
     }
 
+    if ($onedriveOrSharePointUrls -and $onedriveOrSharePointUrls.Count -gt 0) {
+        $capabilities += @{
+            "name"         = "OneDriveAndSharePoint"
+            "items_by_url" = @(
+                foreach ($url in $onedriveOrSharePointUrls) {
+                    @{
+                        "url" = $url
+                    }
+                }
+            )
+        }
+    }
+
+    if ($graphConnectorIds -and $graphConnectorIds.Count -gt 0) {
+        $capabilities += @{
+            "name"        = "GraphConnectors"
+            "connections" = @(
+                foreach ($id in $graphConnectorIds) {
+                    @{
+                        "connection_id" = $id
+                    }
+                }
+            )
+        }
+    }
+
     # if any capibility is enabled, update the capabilities
     if ($capabilities.Count -gt 0) {
-        $copilot.capabilities = $capabilities
+        $copilot | Add-Member -MemberType NoteProperty -Name "capabilities" -Value $capabilities
+    }
+
+    if ($actionFiles -and $actionFiles.Count -gt 0) {
+        $actions = @(
+            foreach ($actionFile in $actionFiles) {
+                # copy the action file to the temp folder
+                $actionFileName = Split-Path $actionFile -Leaf
+                Copy-Item -Path $actionFile -Destination (Join-Path $tempFolder -ChildPath $actionFileName) -Force
+
+                @{
+                    "id"   = [Guid]::NewGuid().ToString()
+                    "file" = $actionFileName
+                }
+            }
+        )
+
+        $copilot | Add-Member -MemberType NoteProperty -Name "actions" -Value $actions
     }
 
     # save the updated declarativecopilot.json to the same file
@@ -81,10 +158,12 @@ function New-DeclarativeCopilot {
     $zipFile = "$name.zip"
 
     # compress the temp folder to a zip file
-    Compress-Archive -Path "$tempFolder\\*" -DestinationPath $zipFile
+    Compress-Archive -Path "$tempFolder\\*" -DestinationPath $zipFile -Force
 
-    Write-Host "The Declarative Copilot app has been created successfully. The zip file is saved as $zipFile."
 
     # remove the temp folder
     Remove-Item -Path $tempFolder -Recurse -Force
+
+    Write-Host "The Declarative Copilot app has been created successfully. The zip file is saved as $zipFile."
+
 }
