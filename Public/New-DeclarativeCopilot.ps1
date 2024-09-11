@@ -113,9 +113,6 @@ function New-DeclarativeCopilot {
         )
     }
 
-    Write-Host ($copilot | ConvertTo-Json -Depth 10)
-
-
     $capabilities = @()
     if ($enableWebSearch) {
         $capabilities += @{
