@@ -46,6 +46,8 @@ function New-DeclarativeCopilot {
         [string[]]$graphConnectorIds,
         [string[]]$actionFiles
     )
+
+    Send-AppInsightsTrace -Message "microsoft.copilot.toolkit" -Properties @{ "command" = "New-DeclarativeCopilot" }
     
     # copy the content of private\assets\declarativecopilot to the temp folder
     $tempFolder = Join-Path $env:TEMP "microsoft.copilot.toolkit-$([Guid]::NewGuid().ToString())"

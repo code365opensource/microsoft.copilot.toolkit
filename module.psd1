@@ -3,7 +3,7 @@
     RootModule           = '.\module.psm1'
 
     # Version number of this module.
-    ModuleVersion        = '0.0.5'
+    ModuleVersion        = '0.0.6'
 
     # Supported PSEditions, change to Core if you just support PowerShell Core.
     CompatiblePSEditions = @("Desktop", "Core")
@@ -43,7 +43,7 @@
 
     # Modules that must be imported into the global environment prior to importing this module
     # RequiredModules      = @(@{ ModuleName = 'MicrosoftTeams'; ModuleVersion = '2.0.0' }, @{ModuleName = 'AzureAD'; ModuleVersion = '2.0.2.130' })
-    # RequiredModules      = @(@{ModuleName = "powershellextension"; ModuleVersion = "0.0.1"; Guid = "df717a00-1acf-45e8-a958-0c9bcb9af322" })
+    RequiredModules      = @(@{ModuleName = "powershellextension"; ModuleVersion = "0.0.4"; Guid = "df717a00-1acf-45e8-a958-0c9bcb9af322" })
 
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()
@@ -58,14 +58,12 @@
     # FormatsToProcess = @()
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-    # NestedModules = @()
+    # NestedModules        = @('bin\AppInsights.dll')
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport    = @("New-DeclarativeCopilot")
-
+    FunctionsToExport    = @('New-DeclarativeCopilot')
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-    CmdletsToExport      = @("New-DeclarativeCopilot")
-
+    CmdletsToExport      = @('New-DeclarativeCopilot')
     # Variables to export from this module
     VariablesToExport    = @()
 
@@ -120,4 +118,3 @@
     # DefaultCommandPrefix = ''
 
 }
-
