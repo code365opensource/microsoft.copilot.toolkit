@@ -29,29 +29,23 @@ Once you get it done, you can use the `Product Copilot` in your Copilot app.
 ```powershell
 -------------------------- EXAMPLE 1 --------------------------
 
-PS C:\>New-DeclarativeCopilot -name "Product Copilot" -instructions "You are an experienced product manager, you help 
-users to ideation, planning, and delivering great product from zero to one."
+PS C:\>New-DeclarativeCopilot -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one."
 
 This is the simplest example, since only the name and instructions parameter are mandatory for this command.
 
 
 -------------------------- EXAMPLE 2 --------------------------
 
-PS C:\>New-DeclarativeCopilot -name "Product Copilot" -instructions "You are an experienced product manager, you help     
-users to ideation, planning, and delivering great product from zero to one." -starterPrompts "Write PM spec, Please help  
-me write spec about the idea below`n"
+PS C:\>New-DeclarativeCopilot -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." -starterPrompts "Write PM spec, Please help  me write spec about the idea below`n"
 
-This example creates a Declarative Copilot app package named "Product Copilot" with the instructions "You are an
-experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." and a  
-starter prompt "Write PM spec, Please help me write spec about the idea below".
+This example creates a Declarative Copilot app package named "Product Copilot" with the instructions "You are anexperienced product manager, you help users to ideation, planning, and delivering great product from zero to one." and a starter prompt "Write PM spec, Please help me write spec about the idea below".
 
 
 
 
 -------------------------- EXAMPLE 3 --------------------------
 
-PS C:\>New-DeclarativeCopilot -name "Product Copilot" -instructions "You are an experienced product manager, you help     
-users to ideation, planning, and delivering great product from zero to one." -starterPrompts "Write PM spec, Please help  
+PS C:\>New-DeclarativeCopilot -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." -starterPrompts "Write PM spec, Please help  
 me write spec about the idea below`n" -enableWebSearch -enableGraphicArt -enableCodeInterpreter
 
 This example creates a Declarative Copilot app package named "Product Copilot" with the instructions "You are an
