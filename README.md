@@ -26,7 +26,7 @@ Once you get it done, you can use the `Product Copilot` in your Copilot app.
 
 ![](Private/assets/productcopilot.jpg)
 
-```powershell
+
 
 -------------------------- EXAMPLE 1 --------------------------
 
@@ -89,13 +89,6 @@ PS > New-DeclarativeCopilot -name "Product Copilot" -instructions "You are an ex
 This example creates a Declarative Copilot app package named "Product Copilot" with the instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." and specifies the outline icon, color icon, and author.
 
 
-
-
-
-
-
-
-```
 
 ## Update the module
 
