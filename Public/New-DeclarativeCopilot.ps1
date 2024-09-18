@@ -150,13 +150,13 @@ function New-DeclarativeCopilot {
             foreach ($starterPrompt in $starterPrompts) {
                 $parts = $starterPrompt.Split(",")
                 if ($parts.Count -eq 1) {
-                    @{
+                    [ordered]@{
                         "title" = $parts[0]
                         "text"  = $parts[0]
                     }
                 }
                 else {
-                    @{
+                    [ordered]@{
                         "title" = $parts[0]
                         "text"  = $parts[1]
                     }
@@ -185,7 +185,7 @@ function New-DeclarativeCopilot {
     }
 
     if ($onedriveOrSharePointUrls -and $onedriveOrSharePointUrls.Count -gt 0) {
-        $capabilities += @{
+        $capabilities += [ordered]@{
             "name"         = "OneDriveAndSharePoint"
             "items_by_url" = @(
                 foreach ($url in $onedriveOrSharePointUrls) {
@@ -198,7 +198,7 @@ function New-DeclarativeCopilot {
     }
 
     if ($graphConnectorIds -and $graphConnectorIds.Count -gt 0) {
-        $capabilities += @{
+        $capabilities += [ordered]@{
             "name"        = "GraphConnectors"
             "connections" = @(
                 foreach ($id in $graphConnectorIds) {
@@ -222,7 +222,7 @@ function New-DeclarativeCopilot {
                 $actionFileName = Split-Path $actionFile -Leaf
                 Copy-Item -Path $actionFile -Destination (Join-Path $tempFolder -ChildPath $actionFileName) -Force
 
-                @{
+                [ordered]@{
                     "id"   = [Guid]::NewGuid().ToString()
                     "file" = $actionFileName
                 }
