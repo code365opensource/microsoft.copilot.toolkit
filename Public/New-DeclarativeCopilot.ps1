@@ -151,14 +151,14 @@ function New-DeclarativeCopilot {
                 $parts = $starterPrompt.Split(",")
                 if ($parts.Count -eq 1) {
                     [ordered]@{
-                        "title" = $parts[0]
-                        "text"  = $parts[0]
+                        "title" = $starterPrompt
+                        "text"  = $starterPrompt
                     }
                 }
                 else {
                     [ordered]@{
                         "title" = $parts[0]
-                        "text"  = $parts[1]
+                        "text"  = $starterPrompt.SubString($parts[0].Length + 1)
                     }
                 }
             }
