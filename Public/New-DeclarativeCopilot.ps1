@@ -82,7 +82,7 @@
     https://github.com/code365opensource/microsoft.copilot.toolkit
 #>
 function New-DeclarativeCopilot {
-    [CmdletBinding()][Alias("ndc")]
+    [CmdletBinding()][Alias("ndc","nda","New-DeclarativeAgent")]
     param (
         [string]$author,
         [Parameter(Mandatory = $true)]
