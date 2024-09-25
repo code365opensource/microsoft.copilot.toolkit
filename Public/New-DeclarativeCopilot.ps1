@@ -38,8 +38,12 @@
 
     Please make sure the user who uses the Declarative Agent has the permission to access the files in the specified URLs.
 
+    if you specify "all", it means the Declarative Agent can access all the files in the user's OneDrive or SharePoint sites you have permission to access.
+
 .PARAMETER graphConnectorIds
     The IDs of the Graph Connectors which the Declarative Agent can access. You can learn more about Graph Connectors here (https://learn.microsoft.com/en-us/microsoft-365-copilot/extensibility/overview-graph-connector).
+
+    if you specify "all", it means the Declarative Agent can access all the Graph Connectors you have permission to access.
 
 .PARAMETER actionFiles
     The action (plugin) files which the Declarative Agent can access. 
@@ -197,28 +201,48 @@ function New-DeclarativeCopilot {
     }
 
     if ($onedriveOrSharePointUrls -and $onedriveOrSharePointUrls.Count -gt 0) {
-        $capabilities += [ordered]@{
-            "name"         = "OneDriveAndSharePoint"
-            "items_by_url" = @(
-                foreach ($url in $onedriveOrSharePointUrls) {
-                    @{
-                        "url" = $url
-                    }
-                }
-            )
+        # if $onedriveOrSharePointUrls contains "all", then add the capability "OneDriveAndSharePoint" without any url
+        if ($onedriveOrSharePointUrls -contains "all") {
+            $capabilities += @{
+                "name" = "OneDriveAndSharePoint"
+            }
         }
+        else {
+            $capabilities += [ordered]@{
+                "name"         = "OneDriveAndSharePoint"
+                "items_by_url" = @(
+                    foreach ($url in $onedriveOrSharePointUrls) {
+                        @{
+                            "url" = $url
+                        }
+                    }
+                )
+            }
+        }
+
+
     }
 
     if ($graphConnectorIds -and $graphConnectorIds.Count -gt 0) {
-        $capabilities += [ordered]@{
-            "name"        = "GraphConnectors"
-            "connections" = @(
-                foreach ($id in $graphConnectorIds) {
-                    @{
-                        "connection_id" = $id
+
+        # if $graphConnectorIds contains "all", then add the capability "GraphConnectors" without any id
+        if ($graphConnectorIds -contains "all") {
+            $capabilities += @{
+                "name" = "GraphConnectors"
+            }
+        }
+        else {
+
+            $capabilities += [ordered]@{
+                "name"        = "GraphConnectors"
+                "connections" = @(
+                    foreach ($id in $graphConnectorIds) {
+                        @{
+                            "connection_id" = $id
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 
