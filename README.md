@@ -1,7 +1,3 @@
-# The readme about microsoft.copilot.toolkit
-
-## Description
-
 The unofficial PowerShell module for Microsoft Copilot, currently it provides the following features:
 
 1. Create your own [Declarative Copilot](https://learn.microsoft.com/en-us/microsoft-365-copilot/extensibility/overview-declarative-copilot) by using `New-DeclarativeCopilot` cmdlet or `ndc` alias.
@@ -15,6 +11,13 @@ The unofficial PowerShell module for Microsoft Copilot, currently it provides th
 Install-Module -Name microsoft.copilot.toolkit -Scope CurrentUser
 
 ```
+> [!TIP]
+> if this is the first time you use PowerShell, you should trust the official PSGallery so that you can download our module from the gallery
+> `Set-PSRepository -InstallationPolicy Trusted -Name PSGallery`
+>
+> You need to allow the RemoteSigned scripts to run on your machine, so our module won't be blocked.
+> `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`
+
 
 ## Create your own Declarative Copilot
 
