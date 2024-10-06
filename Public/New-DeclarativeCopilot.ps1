@@ -90,20 +90,32 @@
 function New-DeclarativeCopilot {
     [CmdletBinding()][Alias("ndc", "nda", "New-DeclarativeAgent")]
     param (
+        [Parameter(ParameterSetName = "default")]
         [string]$author,
-        [Parameter(Mandatory = $true)]
+        [Parameter(ParameterSetName = "default", Mandatory = $true)]
         [string]$name,
+        [Parameter(ParameterSetName = "default")]
         [string]$description,
-        [Parameter(Mandatory = $true)]
+        [Parameter(ParameterSetName = "default", Mandatory = $true)]
         [string]$instructions,
+        [Parameter(ParameterSetName = "default")]
         [string]$outlineIcon192x192,
+        [Parameter(ParameterSetName = "default")]
         [string]$colorIcon32x32,
+        [Parameter(ParameterSetName = "default")]
         [string[]]$starterPrompts,
+        [Parameter(ParameterSetName = "default")]
         [switch]$enableWebSearch,
+        [Parameter(ParameterSetName = "default")]
         [switch]$enableGraphicArt,
+        [Parameter(ParameterSetName = "default")]
         [switch]$enableCodeInterpreter,
+        [Parameter(ParameterSetName = "default")]
         [string[]]$onedriveOrSharePointUrls,
-        [string[]]$graphConnectorIds
+        [Parameter(ParameterSetName = "default")]
+        [string[]]$graphConnectorIds,
+        [Parameter(ParameterSetName = "quickstart", Mandatory = $true)]
+        [switch]$helloworld
     )
 
     Send-AppInsightsTrace -Message "microsoft.copilot.toolkit" -Properties @{ "command" = "New-DeclarativeAgent" } -ErrorAction SilentlyContinue
@@ -113,6 +125,12 @@ function New-DeclarativeCopilot {
 
     $sourceFolder = Join-Path $PSScriptRoot -ChildPath "../private/assets/declarativecopilot"
     Copy-Item -Path $sourceFolder -Destination $tempFolder -Recurse -Force
+
+    # if user specific the helloworld switch, then use the default values for instructions and name parameters
+    if ($helloworld) {
+        $instructions = "Hello, I am a Declarative Agent, I can help you with your daily work. You can ask me anything, I will try my best to help you."
+        $name = "Hello World"
+    }
 
     # update the manifest file
     $manifest = Get-Content (Join-Path $tempFolder "manifest.json") | ConvertFrom-Json
