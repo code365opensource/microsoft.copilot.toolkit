@@ -78,11 +78,6 @@
 
     This example creates a Declarative Agent app package named "Product Copilot" with the instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." and a starter prompt "Write PM spec, Please help me write spec about the idea below". It also enables the Web Search, Graphic Art, and Code Interpreter capabilities, specifies the OneDrive or SharePoint URLs, and specifies the Graph Connector IDs.
 
-.EXAMPLE
-
-    New-DeclarativeAgent -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." -starterPrompts "Write PM spec, Please help me write spec about the idea below`n" -enableWebSearch -enableGraphicArt -enableCodeInterpreter -onedriveOrSharePointUrls "https://contoso.sharepoint.com/sites/teamsite", "https://contoso-my.sharepoint.com/personal/user_contoso_com", "https://contoso-my.sharepoint.com/personal/user_contoso_com/Documents/Shared%20with%20Everyone" -graphConnectorIds "12345678-abcd-1234-abcd-1234567890ab", "23456789-abcd-1234-abcd-1234567890ab" -actionFiles "C:\path\to\action1.json", "C:\path\to\action2.json"
-
-    This example creates a Declarative Agent app package named "Product Copilot" with the instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." and a starter prompt "Write PM spec, Please help me write spec about the idea below". It also enables the Web Search, Graphic Art, and Code Interpreter capabilities, specifies the OneDrive or SharePoint URLs, specifies the Graph Connector IDs, and specifies the action files.
 
 .EXAMPLE
     New-DeclarativeAgent -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one."  -outlineIcon192x192 "C:\path\to\outline.png" -colorIcon32x32 "C:\path\to\color.png" -author "Your name"
@@ -108,8 +103,7 @@ function New-DeclarativeCopilot {
         [switch]$enableGraphicArt,
         [switch]$enableCodeInterpreter,
         [string[]]$onedriveOrSharePointUrls,
-        [string[]]$graphConnectorIds,
-        [string[]]$actionFiles
+        [string[]]$graphConnectorIds
     )
 
     Send-AppInsightsTrace -Message "microsoft.copilot.toolkit" -Properties @{ "command" = "New-DeclarativeAgent" } -ErrorAction SilentlyContinue
@@ -251,22 +245,22 @@ function New-DeclarativeCopilot {
         $copilot | Add-Member -MemberType NoteProperty -Name "capabilities" -Value $capabilities
     }
 
-    if ($actionFiles -and $actionFiles.Count -gt 0) {
-        $actions = @(
-            foreach ($actionFile in $actionFiles) {
-                # copy the action file to the temp folder
-                $actionFileName = Split-Path $actionFile -Leaf
-                Copy-Item -Path $actionFile -Destination (Join-Path $tempFolder -ChildPath $actionFileName) -Force
+    # if ($actionFiles -and $actionFiles.Count -gt 0) {
+    #     $actions = @(
+    #         foreach ($actionFile in $actionFiles) {
+    #             # copy the action file to the temp folder
+    #             $actionFileName = Split-Path $actionFile -Leaf
+    #             Copy-Item -Path $actionFile -Destination (Join-Path $tempFolder -ChildPath $actionFileName) -Force
 
-                [ordered]@{
-                    "id"   = [Guid]::NewGuid().ToString()
-                    "file" = $actionFileName
-                }
-            }
-        )
+    #             [ordered]@{
+    #                 "id"   = [Guid]::NewGuid().ToString()
+    #                 "file" = $actionFileName
+    #             }
+    #         }
+    #     )
 
-        $copilot | Add-Member -MemberType NoteProperty -Name "actions" -Value $actions
-    }
+    #     $copilot | Add-Member -MemberType NoteProperty -Name "actions" -Value $actions
+    # }
 
     # save the updated declarativecopilot.json to the same file
     $copilot | ConvertTo-Json -Depth 10 | Set-Content -Path (Join-Path $tempFolder "declarativecopilot.json") -Force -Encoding UTF8
