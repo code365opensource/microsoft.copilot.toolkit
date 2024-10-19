@@ -163,7 +163,7 @@ function New-DeclarativeCopilot {
     }
 
     # update the content of the declarativecopilot.json
-    $copilot = Get-Content (Join-Path $tempFolder "declarativecopilot.json") | ConvertFrom-Json
+    $copilot = Get-Content (Join-Path $tempFolder "declarativeagent.json") | ConvertFrom-Json
     $copilot.name = $name
 
     # if instructions is a file, read the content of the file
@@ -281,7 +281,7 @@ function New-DeclarativeCopilot {
     # }
 
     # save the updated declarativecopilot.json to the same file
-    $copilot | ConvertTo-Json -Depth 10 | Set-Content -Path (Join-Path $tempFolder "declarativecopilot.json") -Force -Encoding UTF8
+    $copilot | ConvertTo-Json -Depth 10 | Set-Content -Path (Join-Path $tempFolder "declarativeagent.json") -Force -Encoding UTF8
 
 
     # create a zip file and save it in current folder, named as $name.zip
