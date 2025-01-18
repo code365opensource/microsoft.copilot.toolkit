@@ -32,6 +32,11 @@ Once you get it done, you can use the `Product Copilot` in your Copilot app.
 
 ![](Private/assets/productcopilot.jpg)
 
+-------------------------- EXAMPLE 0 --------------------------
+
+PS > New-DeclarativeAgent -helloworld
+
+This is the helloworld example, if will create a simplest agent, name is "Hello World", and instructions is "Hello, I am a Declarative Agent, I can help you with your daily work. You can ask me anything, I will try my best to help you.".
 
 
 -------------------------- EXAMPLE 1 --------------------------
@@ -47,7 +52,9 @@ This is the simplest example, since only the name and instructions parameter are
 
 PS > New-DeclarativeAgent -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." -starterPrompts "Write PM spec, Please help me write spec about the idea below`n"
 
-This example creates a Declarative Agent app package named "Product Copilot" with the instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." and a starter prompt "Write PM spec, Please help me write spec about the idea below".
+You can also specify the starter prompts parameter to provide a prompt for the user to start the conversation. It is up to 6 prompts, and the parameter is a string array. You can specifiy multiple prompts by using -starterPrompts "Prompt1", "Prompt2", "Prompt3".
+
+Each prompt can split by a camma to get the title and text. In this example, the starter prompt is "Write PM spec, Please help me write spec about the idea below", so the title is "Write PM spec" and the text is "Please help me write spec about the idea below".
 
 
 
@@ -56,7 +63,7 @@ This example creates a Declarative Agent app package named "Product Copilot" wit
 
 PS > New-DeclarativeAgent -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." -starterPrompts "Write PM spec, Please help me write spec about the idea below`n" -enableWebSearch -enableGraphicArt -enableCodeInterpreter
 
-This example creates a Declarative Agent app package named "Product Copilot" with the instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." and a starter prompt "Write PM spec, Please help me write spec about the idea below". It also enables the Web Search, Graphic Art, and Code Interpreter capabilities.
+This example enables the Web Search, Graphic Art, and Code Interpreter capabilities for the agent. The Web Search capability allows the agent to search the web for information, the Graphic Art capability allows the agent to create graphic art, and the Code Interpreter capability allows the agent to interpret code by using Python.
 
 
 
@@ -71,24 +78,6 @@ This example creates a Declarative Agent app package named "Product Copilot" wit
 
 
 -------------------------- EXAMPLE 5 --------------------------
-
-PS > New-DeclarativeAgent -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." -starterPrompts "Write PM spec, Please help me write spec about the idea below`n" -enableWebSearch -enableGraphicArt -enableCodeInterpreter -onedriveOrSharePointUrls "https://contoso.sharepoint.com/sites/teamsite", "https://contoso-my.sharepoint.com/personal/user_contoso_com", "https://contoso-my.sharepoint.com/personal/user_contoso_com/Documents/Shared%20with%20Everyone" -graphConnectorIds "12345678-abcd-1234-abcd-1234567890ab", "23456789-abcd-1234-abcd-1234567890ab"
-
-This example creates a Declarative Agent app package named "Product Copilot" with the instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." and a starter prompt "Write PM spec, Please help me write spec about the idea below". It also enables the Web Search, Graphic Art, and Code Interpreter capabilities, specifies the OneDrive or SharePoint URLs, and specifies the Graph Connector IDs.
-
-
-
-
--------------------------- EXAMPLE 6 --------------------------
-
-PS > New-DeclarativeAgent -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." -starterPrompts "Write PM spec, Please help me write spec about the idea below`n" -enableWebSearch -enableGraphicArt -enableCodeInterpreter -onedriveOrSharePointUrls "https://contoso.sharepoint.com/sites/teamsite", "https://contoso-my.sharepoint.com/personal/user_contoso_com", "https://contoso-my.sharepoint.com/personal/user_contoso_com/Documents/Shared%20with%20Everyone" -graphConnectorIds "12345678-abcd-1234-abcd-1234567890ab", "23456789-abcd-1234-abcd-1234567890ab" -actionFiles "C:\path\to\action1.json", "C:\path\to\action2.json"
-
-This example creates a Declarative Agent app package named "Product Copilot" with the instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." and a starter prompt "Write PM spec, Please help me write spec about the idea below". It also enables the Web Search, Graphic Art, and Code Interpreter capabilities, specifies the OneDrive or SharePoint URLs, specifies the Graph Connector IDs, and specifies the action files.
-
-
-
-
--------------------------- EXAMPLE 7 --------------------------
 
 PS > New-DeclarativeAgent -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one."  -outlineIcon192x192 "C:\path\to\outline.png" -colorIcon32x32 "C:\path\to\color.png" -author "Your name"
 
