@@ -3,6 +3,7 @@
 
 | Date       | Version  | Description                                                                 |
 |------------|----------|-----------------------------------------------------------------------------|
+|2025-01-19|0.1.6|User can publish the app to organization app catalog directly, use the `-publish` parameter. [#6](https://github.com/code365opensource/microsoft.copilot.toolkit/issues/6)|
 |2024-10-19|0.1.5|Migrate to the new schema. [#8](https://github.com/code365opensource/microsoft.copilot.toolkit/issues/8)|
 |2024-10-6|0.1.4| Minor improvements.[#13](https://github.com/code365opensource/microsoft.copilot.toolkit/issues/13)  [#14](https://github.com/code365opensource/microsoft.copilot.toolkit/issues/14) |
 |2024-9-25|0.1.3| Rename New-DeclarativeCopilot to New-DeclarativeAgent [#5](https://github.com/code365opensource/microsoft.copilot.toolkit/issues/5), Support instructions in file [#7](https://github.com/code365opensource/microsoft.copilot.toolkit/issues/7), Support all OneDriveAndSharePoint and graphConnectorIds [#10](https://github.com/code365opensource/microsoft.copilot.toolkit/issues/10)|
