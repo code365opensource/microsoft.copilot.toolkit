@@ -45,8 +45,20 @@
 
     if you specify "all", it means the Declarative Agent can access all the Graph Connectors you have permission to access.
 
-.PARAMETER actionFiles
-    The action (plugin) files which the Declarative Agent can access. 
+.PARAMETER helloworld
+    If you specify this switch, the cmdlet will create a simplest agent, name is "Hello World", and instructions is "Hello, I am a Declarative Agent, I can help you with your daily work. You can ask me anything, I will try my best to help you.".
+
+.PARAMETER publish
+    If you specify this switch, the cmdlet will publish the Declarative Agent app to your organization, and you can share the app to your organization by a link.
+    Before you publish the app, you need to make sure you have logged in with your work or school account, and have the admin permission to publish the app.
+    The cmdlet will use the MSAL.PS module to get the access token for you to publish the app, if the module is not installed, it will install it first.
+    You can learn more about the MSAL.PS module here (https://www.powershellgallery.com/packages/MSAL.PS).
+
+.EXAMPLE
+
+    New-DeclarativeAgent -helloworld
+
+    This is the helloworld example, if will create a simplest agent, name is "Hello World", and instructions is "Hello, I am a Declarative Agent, I can help you with your daily work. You can ask me anything, I will try my best to help you.".
 
 .EXAMPLE
     New-DeclarativeAgent -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." 
@@ -59,9 +71,12 @@
     This example creates a Declarative Agent app package named "Product Copilot" with the instructions from the file "yourinstructions.txt".
 
 .EXAMPLE
-    New-DeclarativeAgent -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." -starterPrompts "Write PM spec, Please help me write spec about the idea below`n" 
+    
+    New-DeclarativeAgent -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." -starterPrompts "Write PM spec, Please help me write spec about the idea below`n"
 
-    This example creates a Declarative Agent app package named "Product Copilot" with the instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." and a starter prompt "Write PM spec, Please help me write spec about the idea below". 
+    You can also specify the starter prompts parameter to provide a prompt for the user to start the conversation. It is up to 6 prompts, and the parameter is a string array. You can specifiy multiple prompts by using -starterPrompts "Prompt1", "Prompt2", "Prompt3".
+
+    Each prompt can split by a camma to get the title and text. In this example, the starter prompt is "Write PM spec, Please help me write spec about the idea below", so the title is "Write PM spec" and the text is "Please help me write spec about the idea below".
 
 .EXAMPLE
     New-DeclarativeAgent -name "Product Copilot" -instructions "You are an experienced product manager, you help users to ideation, planning, and delivering great product from zero to one." -starterPrompts "Write PM spec, Please help me write spec about the idea below`n" -enableWebSearch -enableGraphicArt -enableCodeInterpreter
@@ -115,10 +130,31 @@ function New-DeclarativeCopilot {
         [Parameter(ParameterSetName = "default")]
         [string[]]$graphConnectorIds,
         [Parameter(ParameterSetName = "quickstart", Mandatory = $true)]
-        [switch]$helloworld
+        [switch]$helloworld,
+        [Parameter(ParameterSetName = "default")]
+        [Parameter(ParameterSetName = "quickstart")]
+        [switch]$publish
     )
 
     Send-AppInsightsTrace -Message "microsoft.copilot.toolkit" -Properties @{ "command" = "New-DeclarativeAgent" } -ErrorAction SilentlyContinue
+
+
+    # if user specify the publish switch, then check if the "MSAL.ps" module is installed, if not, install it first, and then try to get the accesstoken for the user to publish the app, use the "Get-MSALToken" cmdlet to get the token
+    if ($publish) {
+        $msalModule = Get-Module -Name "MSAL.PS" -ListAvailable
+        if (-not $msalModule) {
+            Install-Module -Name "MSAL.PS" -Scope CurrentUser -Force
+        }
+
+        $accessToken = (Get-MsalToken -ClientId "52d52498-5bb2-45c5-9caf-3f01c326d9d0" -RedirectUri "msal52d52498-5bb2-45c5-9caf-3f01c326d9d0://auth" -Scopes "Directory.ReadWrite.All" -ErrorAction SilentlyContinue).AccessToken
+
+        if (-not $accessToken) {
+            Write-Error "Failed to get the access token, please make sure you have logged in with your work or school account, and have the admin permission to publish the app."
+            return
+        }
+    }
+
+
     
     # copy the content of private\assets\declarativecopilot to the temp folder
     $tempFolder = Join-Path $env:TEMP "microsoft.copilot.toolkit-$([Guid]::NewGuid().ToString())"
@@ -295,5 +331,17 @@ function New-DeclarativeCopilot {
     Remove-Item -Path $tempFolder -Recurse -Force
 
     Write-Host "The Declarative Agent app has been created successfully. The zip file is saved as $zipFile."
+
+    if ($publish) {
+        # publish the app
+        $app = (Invoke-WebRequest -InFile $zipFile -Method Post -Uri "https://graph.microsoft.com/beta/appCatalogs/teamsApps" -ContentType "application/zip" -Headers @{ "Authorization" = "Bearer $accessToken" } -ErrorAction SilentlyContinue).Content | ConvertFrom-Json
+
+        if ($app) {
+            Write-Host "The Declarative Agent app has been published successfully. You can find it in the Teams admin center, or you can share the app to your organization by a link : https://teams.cloud.microsoft/l/app/$($app.id)" 
+        }
+        else {
+            Write-Error "Failed to publish the Declarative Agent app, please check the error message above."
+        }
+    }
 
 }
