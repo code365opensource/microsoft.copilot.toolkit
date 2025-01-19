@@ -26,6 +26,9 @@ Install-Module -Name microsoft.copilot.toolkit -Scope CurrentUser
 
 You can use the `New-DeclarativeAgent` cmdlet to create your own Declarative Agent app package. Below are some examples of how to use the `New-DeclarativeAgent` cmdlet. When you get the app package, you can upload it to your Microsoft 365 Copilot environment. You can also download the [sample package](Private/assets/Product%20Copilot.zip) if you want to try it out first.
 
+> [!TIP]
+> From v 0.1.6 (released on 2025-1-19), you can use the `publish` parameter to publish the app package to your Copilot environment directly.
+
 ![](Private/assets/sideload.png)
 
 Once you get it done, you can use the `Product Copilot` in your Copilot app.
